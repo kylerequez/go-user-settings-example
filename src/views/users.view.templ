@@ -1,0 +1,141 @@
+package views
+
+import (
+"fmt"
+"github.com/kylerequez/go-user-settings-example/src/models"
+"github.com/kylerequez/go-user-settings-example/src/repositories"
+"github.com/kylerequez/go-user-settings-example/src/views/layouts"
+"strings"
+)
+
+templ Users(
+info models.AppInfo,
+form models.UsersSearchFormData,
+users *[]models.User,
+) {
+@layouts.MainLayout(info) {
+<div
+	class="flex flex-col text-black dark:text-white items-center justify-start space-y-10 h-screen w-screen px-10 py-10">
+	@UsersSearch(form)
+	@UsersCreate(info)
+	@UsersDisplay(info.LoggedInUser, users)
+</div>
+}
+}
+
+templ UsersSearch(
+form models.UsersSearchFormData,
+) {
+<form class="flex flex-row w-screen items-center justify-center space-x-6" hx-post="/api/v1/users/search"
+	hx-target="#users-container" hx-trigger="change" hx-swap="outerHTML">
+	<input name="keyword" type="text" class="border border-gray-700 rounded-lg 
+					dark:border dark:border-white dark:rounded-lg dark:bg-black dark:placeholder:text-white 
+					placeholder:font-sm font-sm
+					w-[40%] p-3" placeholder="Enter user info..." />
+	<div class="flex flex-row space-x-2 w-fit">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+			class="size-6">
+			<path stroke-linecap="round" stroke-linejoin="round"
+				d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75">
+			</path>
+		</svg>
+		<select name="sort" class="dark:bg-black dark:text-white px-4">
+			<option value="">None</option>
+			<!-- <option value="name asc">Name (Ascending)</option> -->
+			<!-- <option value="name desc">Name (Descending)</option> -->
+			<option value="email asc">Email (Ascending)</option>
+			<option value="email desc">Email (Descending)</option>
+			<option value="createdAt asc">Created At (Ascending)</option>
+			<option value="createdAt desc">Created At (Descending)</option>
+			<option value="updatedAt asc">Updated At (Ascending)</option>
+			<option value="updatedAt desc">Updated At (Descending)</option>
+		</select>
+	</div>
+	<div class="flex flex-row space-x-2 w-fit">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+			class="size-6">
+			<path stroke-linecap="round" stroke-linejoin="round"
+				d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z">
+			</path>
+		</svg>
+		<select name="filter" class="dark:bg-black dark:text-white px-5">
+			<option value="">None</option>
+			for _, auth := range repositories.AUTHORITIES {
+			<option value={ auth }>{ strings.Title(strings.ToLower(auth)) }</option>
+			}
+		</select>
+	</div>
+</form>
+}
+
+templ UsersCreate(
+info models.AppInfo,
+) {
+if info.LoggedInUser.Authority == repositories.AUTH_ADMIN {
+<div class="flex flex-row" hx-boost="true">
+	<a href="/users/create">
+		<button class="border border-black rounded hover:bg-gray-700 hover:text-white
+			dark:border-white dark:rounded dark:hover:bg-white dark:hover:text-black font-semibold px-4 py-2">
+			Create A User
+		</button>
+	</a>
+</div>
+}
+}
+
+templ UsersDisplay(
+loggedInUser *models.User,
+users *[]models.User,
+) {
+<div id="users-container" class="flex flex-col space-y-10 flex-nowrap h-fit w-full">
+	if users != nil {
+	for count , user := range *users {
+	if c := count + 1; c == 1 || c % 4 == 1 {
+	@templ.Raw(`<div class="flex flex-row w-full items-center justify-center space-x-10">`)
+		}
+		@UserCard(loggedInUser, user)
+		if c := count + 1; c % 4 == 0 {
+		@templ.Raw(`</div>`)
+	}
+	}
+	} else {
+	NO USERS
+	}
+</div>
+}
+
+templ UserCard(
+loggedInUser *models.User,
+user models.User,
+) {
+<div class="flex flex-col items-center justify-center 
+	border border-black rounded-lg
+	dark:border dark:border-white dark:rounded-lg
+	h-fit w-[360px]">
+	<div class="flex pt-14">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+			class="size-24 
+				border-4 border-black rounded-full
+				dark:border-4 dark:border-white dark:rounded-full
+				p-4">
+			<path stroke-linecap="round" stroke-linejoin="round"
+				d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z">
+			</path>
+		</svg>
+	</div>
+	<div class="flex font-semibold pt-6">
+		{ user.Email }
+	</div>
+	<div class="flex">
+		{ strings.ToUpper(user.Authority) }
+	</div>
+	<div class="flex pt-10 pb-14">
+		<a href={ templ.URL(fmt.Sprintf("/users/%s", user.ID.String())) }>
+			<button
+				class="
+			border border-black rounded hover:bg-gray-700 hover:text-white
+			dark:border dark:border-white dark:rounded dark:hover:bg-white dark:hover:text-black font-semibold px-6 py-2">View</button>
+		</a>
+	</div>
+</div>
+}

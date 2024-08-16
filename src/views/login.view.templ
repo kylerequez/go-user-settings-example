@@ -1,0 +1,91 @@
+package views
+
+import (
+"github.com/kylerequez/go-user-settings-example/src/models"
+"github.com/kylerequez/go-user-settings-example/src/utils"
+"github.com/kylerequez/go-user-settings-example/src/views/layouts"
+)
+
+func DisplayLoginFormValue(form *models.LoginFormData, name string) string {
+if form == nil {
+return ""
+}
+switch name {
+case "email":
+return form.Email
+case "password":
+return form.Password
+}
+return ""
+}
+
+templ Login(
+info models.AppInfo,
+form *models.LoginFormData,
+msg *models.AppMessages,
+) {
+@layouts.MainLayout(info) {
+<div class="flex flex-col h-screen w-screen items-center justify-center">
+	<div
+		class="flex flex-col border-2 border-white rounded text-white space-y-5 py-20 w-[40%] items-center justify-center">
+		<div>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+				class="size-40">
+				<path stroke-linecap="round" stroke-linejoin="round"
+					d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z">
+				</path>
+			</svg>
+		</div>
+		<div class="text-lg font-bold">
+			Users Systems Login
+		</div>
+		@LoginForm(form, msg)
+	</div>
+</div>
+}
+}
+
+templ LoginForm(
+form *models.LoginFormData,
+msg *models.AppMessages,
+) {
+<form id="login-form" class="w-[60%]" hx-post="/api/v1/auth/login" hx-target="#login-form" hx-trigger="submit"
+	hx-swap="outerHTML">
+	<div class="flex flex-col space-y-6">
+		<div class="flex flex-col w-full space-y-2">
+			<label for="email" class="ml-2 font-semibold">Email</label>
+			<input id="email" type="email" name="email" value={ DisplayLoginFormValue(form, "email" ) }
+				class="bg-black border h-[30px] w-full p-4 border-white rounded" />
+			if msg != nil && msg.Errors["login-form-email-err"] != "" {
+			<span class="font-semibold text-red-700">{ utils.DisplayMessage(msg.Errors["login-form-email-err"]) }</span>
+			}
+		</div>
+		<div class="flex flex-col w-full space-y-2">
+			<label for="password" class="ml-2 font-semibold">Password</label>
+			<input id="password" type="password" name="password" value={ DisplayLoginFormValue(form, "password" ) }
+				class="bg-black border h-[30px] w-full p-4 border-white rounded" />
+			if msg != nil && msg.Errors["login-form-password-err"] != "" {
+			<span class="font-semibold text-red-700">{ utils.DisplayMessage(msg.Errors["login-form-password-err"]) }</span>
+			}
+		</div>
+		if msg != nil && msg.Errors["login-form-err"] != "" {
+		<span class="font-semibold text-red-700">
+			{ utils.DisplayMessage(msg.Errors["login-form-err"]) }
+		</span>
+		}
+		<div class="flex flex-col items-center">
+			<button type="submit" class="border border-white rounded 
+					bg-black text-white font-semibold
+					hover:bg-white hover:text-black
+					px-4 py-2 w-[30%]">
+				Login
+			</button>
+			if msg != nil && msg.Message != nil {
+			<span class="font-semibold text-green-700">
+				{ utils.DisplayMessage(*msg.Message) }
+			</span>
+			}
+		</div>
+	</div>
+</form>
+}

@@ -1,0 +1,18 @@
+package views
+
+import (
+"github.com/kylerequez/go-user-settings-example/src/models"
+"github.com/kylerequez/go-user-settings-example/src/views/layouts"
+)
+
+templ NotFound(
+info models.AppInfo,
+msg string,
+) {
+@layouts.MainLayout(info) {
+<div class="flex flex-row">
+  <div class="flex">ERROR NOT FOUND</div>
+  <div class="flex"></div>
+</div>
+}
+}

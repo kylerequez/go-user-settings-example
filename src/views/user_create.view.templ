@@ -1,0 +1,111 @@
+package views
+
+import (
+"github.com/kylerequez/go-user-settings-example/src/models"
+"github.com/kylerequez/go-user-settings-example/src/repositories"
+"github.com/kylerequez/go-user-settings-example/src/utils"
+"github.com/kylerequez/go-user-settings-example/src/views/layouts"
+"strings"
+)
+
+func DisplayCreateUserFormValue(form *models.CreateUserFormData, name string) string {
+if form == nil {
+return ""
+}
+switch name {
+case "name":
+return form.Name
+case "email":
+return form.Email
+}
+return ""
+}
+
+templ UserCreate(
+info models.AppInfo,
+form *models.CreateUserFormData,
+msg *models.AppMessages,
+) {
+@layouts.MainLayout(info) {
+<div
+	class="flex flex-col text-black dark:text-white items-center justify-start space-y-10 items-center justify-center h-screen w-screen px-10 py-10">
+	<div class="flex flex-col
+		border-2 border-black rounded text-black
+		dark:border-2 dark:border-white dark:rounded dark:text-white
+		space-y-5 py-20 w-[60%] items-center justify-center">
+		<div class="font-bold text-4xl">
+			Create A User
+		</div>
+		@CreateUserForm(form, msg)
+	</div>
+</div>
+}
+}
+
+templ CreateUserForm(
+form *models.CreateUserFormData,
+msg *models.AppMessages,
+) {
+<form id="create-user-form" hx-post="/api/v1/users" hx-target="#create-user-form" hx-swap="outerHTML">
+	<div class="flex flex-col w-full space-y-6">
+		<div class="flex flex-col w-full space-y-2">
+			<label for="name" class="ml-2 font-semibold">Name</label>
+			<input id="name" name="name" type="text" value={ DisplayCreateUserFormValue(form, "name" ) } class="
+				bg-white border border-black rounded
+				dark:bg-black dark:border dark:border-white dark:rounded
+				h-[30px] w-full p-4" />
+			if msg != nil && msg.Errors["create-user-form-name-err"] != "" {
+			<span class="font-semibold text-red-700">{ utils.DisplayMessage(msg.Errors["create-user-form-name-err"]) }</span>
+			}
+		</div>
+		<div class="flex flex-col w-full space-y-2">
+			<label for="email" class="ml-2 font-semibold">Email</label>
+			<input id="email" name="email" type="email" value={ DisplayCreateUserFormValue(form, "email" ) } class="
+				bg-white border border-black rounded
+				dark:bg-black dark:border dark:border-white dark:rounded
+				h-[30px] w-full p-4" />
+			if msg != nil && msg.Errors["create-user-form-email-err"] != "" {
+			<span class="font-semibold text-red-700">{ utils.DisplayMessage(msg.Errors["create-user-form-email-err"]) }</span>
+			}
+		</div>
+		<div class="flex flex-col w-full space-y-2">
+			<label for="authority" class="ml-2 font-semibold">Authority</label>
+			<select name="authority" class="
+				text-black bg-white border border-black rounded
+				dark:text-white dark:bg-black dark:border dark:border-white dark:rounded
+				px-4 py-2">
+				for _, authority := range repositories.AUTHORITIES {
+				if form != nil && form.Authority == authority {
+				<option value={ authority } selected>{ strings.Title(strings.ToLower(authority)) }</option>
+				} else {
+				<option value={ authority }>{ strings.Title(strings.ToLower(authority)) }</option>
+				}
+				}
+			</select>
+			if msg != nil && msg.Errors["create-user-form-authority-err"] != "" {
+			<span class="font-semibold text-red-700">
+				{ utils.DisplayMessage(msg.Errors["create-user-form-authority-err"]) }
+			</span>
+			}
+		</div>
+		<div class="flex flex-col items-center">
+			<button type="submit" class="
+					border border-black rounded bg-white text-black hover:bg-black hover:text-white
+					dark:border dark:border-white dark:rounded dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black
+					font-semibold px-6 py-2">
+				Create
+			</button>
+			if msg != nil && msg.Message != nil {
+			<span class="font-semibold text-green-700">
+				{ utils.DisplayMessage(*msg.Message) }
+			</span>
+			}
+			if msg != nil && msg.Errors["create-user-form-err"] != "" {
+			<span class="font-semibold text-green-700">
+				{ utils.DisplayMessage(msg.Errors["create-user-form-err"]) }
+			</span>
+			}
+		</div>
+	</div>
+</form>
+}

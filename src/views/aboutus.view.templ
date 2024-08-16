@@ -1,0 +1,58 @@
+package views
+
+import (
+"github.com/kylerequez/go-user-settings-example/src/models"
+"github.com/kylerequez/go-user-settings-example/src/views/layouts"
+)
+
+templ AboutUs(
+info models.AppInfo,
+) {
+@layouts.MainLayout(info) {
+<div class="flex flex-col justify-center items-center text-black dark:text-white space-y-6 h-screen w-screen px-10">
+	<div class="flex font-semibold px-10">
+		About Us Content
+	</div>
+	<hr class="flex 
+	border border-white rounded 
+	dark:border dark:border-black dark:rounded
+	w-[85%]" />
+	<div class="flex text-justify indent-10 px-10">
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tincidunt consectetur pretium. Morbi mollis ultricies
+		orci sed consequat. Etiam eu nulla laoreet, lobortis diam vel, auctor sapien. Quisque condimentum efficitur lorem,
+		pretium bibendum enim pulvinar ac. Nam vulputate magna feugiat ipsum gravida commodo. In id tincidunt est, vitae
+		sodales orci. Integer in elit gravida, dignissim augue id, dignissim turpis. In auctor sem dolor, vel auctor arcu
+		finibus eget. Sed vel nulla pharetra, eleifend tortor quis, rhoncus arcu. Proin nisi est, tincidunt eu velit vitae,
+		imperdiet ultricies sem.
+	</div>
+	<div class="flex text-justify indent-10 px-10">
+		Quisque in accumsan sapien. Vivamus tortor neque, vestibulum eget volutpat pulvinar,
+		ullamcorper commodo metus. Sed auctor diam diam, id aliquam libero sollicitudin sit amet. Nam ullamcorper, nibh et
+		hendrerit mattis, nulla lectus auctor justo, sit amet eleifend massa neque quis erat.
+		Quisque iaculis sollicitudin metus at sollicitudin. Proin sem sapien, auctor vel sagittis sed, cursus sit amet erat.
+		Aenean eu nisi auctor, tempor ex vitae, tempor dolor. Duis vitae gravida metus. Sed laoreet commodo lobortis.
+		Curabitur vulputate tortor id felis dapibus molestie. Vestibulum ante ipsum primis in faucibus orci luctus et
+		ultrices posuere cubilia curae; Suspendisse eu sapien vitae nulla fermentum aliquet ac non nisl. Cras dapibus
+		imperdiet nulla, varius pretium ipsum efficitur ut. Mauris quis dolor id purus placerat malesuada vitae ut nisl.
+		Vivamus justo velit, porta egestas venenatis id, lobortis sed nisl.
+	</div>
+	<div class="flex text-justify indent-10 px-10">
+		Maecenas congue rutrum vulputate. Sed ante sem, porta eget erat eget, sagittis porta lacus. Praesent semper
+		porttitor mattis. Integer nec lectus ultrices, laoreet nisl sed, rhoncus dolor. Ut tempor neque sed dolor egestas,
+		sed fringilla augue sagittis. Aenean non mattis odio. Aliquam nec quam nunc. Suspendisse at ligula vitae lorem
+		mollis hendrerit. Phasellus eu rhoncus nibh. Praesent at tortor erat. Mauris elementum libero et nibh aliquet, sit
+		amet feugiat lacus mollis. Sed imperdiet risus ut mollis eleifend. Integer sit amet augue erat.
+		Morbi non erat consectetur, imperdiet urna nec, aliquam mi. Curabitur tempus metus et rutrum pharetra. Etiam eu
+		metus a velit malesuada venenatis. Cras tempus ex at tempus tincidunt. Pellentesque non purus vitae nulla hendrerit
+		consequat suscipit at enim. Duis ut semper orci, eget vestibulum eros. Nunc quis venenatis tortor.
+		Aliquam porta quam et diam maximus, non pharetra augue luctus. Quisque auctor ultricies nunc, sit amet gravida est
+		consectetur at. Praesent ultrices massa nec nisl fringilla semper. Donec at iaculis arcu. Morbi non purus id ex
+		iaculis venenatis. Etiam nibh sapien, blandit eget turpis eget, ultrices vehicula ante. Suspendisse non eros purus.
+		Aliquam erat volutpat. Mauris eget sem pulvinar, laoreet sem quis, efficitur ante. Duis feugiat ornare pellentesque.
+		Phasellus eu faucibus nunc. Fusce dapibus, urna a malesuada venenatis, arcu felis imperdiet diam, nec dignissim nunc
+		ligula eget augue. Etiam tortor nisi, porttitor ac finibus egestas, maximus vitae massa. Sed accumsan porttitor
+		nunc, quis mollis dui fermentum dictum.
+	</div>
+</div>
+}
+}

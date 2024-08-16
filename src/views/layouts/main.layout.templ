@@ -1,0 +1,40 @@
+package layouts
+
+import (
+"github.com/kylerequez/go-user-settings-example/src/models"
+"github.com/kylerequez/go-user-settings-example/src/views/partials"
+)
+
+func DisplayTheme(
+info models.AppInfo,
+) string {
+if info.LoggedInUser == nil || info.LoggedInUser.Settings.Theme == "dark" {
+return "dark"
+} else {
+return ""
+}
+}
+
+templ MainLayout(
+info models.AppInfo,
+) {
+<!DOCTYPE html>
+<html class={ DisplayTheme(info) }>
+
+<head>
+	<title>{ info.Title }</title>
+	<link rel="stylesheet" href="/public/styles.css" />
+	<script src="https://unpkg.com/htmx.org@2.0.1/dist/htmx.js"
+		integrity="sha384-gpIh5aLQ0qmX8kZdyhsd6jA24uKLkqIr1WAGtantR4KsS97l/NRBvh8/8OYGThAf"
+		crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-white dark:bg-black">
+	<div class="flex flex-col h-screen w-screen">
+		@partials.Navbar(info)
+		{ children... }
+	</div>
+</body>
+
+</html>
+}

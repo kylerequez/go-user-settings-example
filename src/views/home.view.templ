@@ -1,0 +1,20 @@
+package views
+
+import (
+"github.com/kylerequez/go-user-settings-example/src/models"
+"github.com/kylerequez/go-user-settings-example/src/views/layouts"
+)
+
+templ Home(
+info models.AppInfo,
+) {
+@layouts.MainLayout(info) {
+<div class="text-black dark:text-white">
+	if info.LoggedInUser != nil {
+	Dashboard
+	} else {
+	Home
+	}
+</div>
+}
+}
